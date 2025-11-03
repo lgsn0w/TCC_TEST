@@ -49,3 +49,23 @@ Para checar a qualidade e a confiabilidade das perguntas de cada eixo, você pod
 * `http://127.0.0.1:8000/admin/stats/WEB_DEV`
 * `http://127.0.0.1:8000/admin/stats/DATA_SCIENCE`
 * `http://127.0.0.1:8000/admin/stats/CYBERSECURITY`
+
+
+#File structure
+
+TCC/                   
+|
+|--- .venv/              
+|
+|--- app/                (api)
+|    |--- __init__.py
+|    |--- main.py              (servidor api)
+|    |--- personality_scoring.py (weight algo)
+|    |--- database.py          
+|    |--- models.py            (sqlalchemy)
+|    |--- schemas.py
+|    |--- service.py
+|
+|--- quiz.html          
+|--- quiz.db (db sera criada automaticamente ao rodar o uvicorn)            
+|--- requirements.txt      

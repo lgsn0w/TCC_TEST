@@ -24,7 +24,7 @@ def score_axis(responses: Dict[str, int],
     weighted_sum = 0.0
     denom = 0.0
 
-    item_abs_max = (scale_k - 1) / 2  # since c_i in [-item_abs_max, +item_abs_max]
+    item_abs_max = (scale_k - 1) / 2  
 
     for q_id, w in axis_map:
         if q_id not in responses or responses[q_id] is None:
@@ -57,7 +57,7 @@ if __name__ == "__main__":
         "JP": [("q8", -1.0), ("q9", 1.0)],
     }
 
-    reverse_items = {"q2": True, "q7": True}  # example
+    reverse_items = {"q2": True, "q7": True}  
 
     results = {}
     for axis, mapping in axes.items():
@@ -96,5 +96,6 @@ def item_total_correlation(item_matrix: np.ndarray) -> np.ndarray:
             correlations[j] = 0.0
         else:
             correlations[j] = np.corrcoef(item, total_excl)[0, 1]
+
 
     return correlations

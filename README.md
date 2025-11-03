@@ -51,21 +51,18 @@ Para checar a qualidade e a confiabilidade das perguntas de cada eixo, você pod
 * `http://127.0.0.1:8000/admin/stats/CYBERSECURITY`
 
 
-#File structure
+##FILE STRUCTURE
 
-TCC/                   
-|
-|--- .venv/              
-|
-|--- app/                (api)
-|    |--- __init__.py
-|    |--- main.py              (servidor api)
-|    |--- personality_scoring.py (weight algo)
-|    |--- database.py          
-|    |--- models.py            (sqlalchemy)
-|    |--- schemas.py
-|    |--- service.py
-|
-|--- quiz.html          
-|--- quiz.db (db sera criada automaticamente ao rodar o uvicorn)            
-|--- requirements.txt      
+TCC/
+
+├── app/                   
+│   ├── __init__.py        
+│   ├── database.py       
+│   ├── main.py           
+│   ├── models.py         
+│   ├── personality_scoring.py  
+│   └── seed_db.py        
+│
+├── quiz.db                 
+├── quiz.html              
+└── requirements.txt        

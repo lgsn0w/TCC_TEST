@@ -4,18 +4,18 @@ from .models import ContentResource, Base
 RESOURCES = [
     # Web Dev
     {"title": "MDN Web Docs: Guia para Iniciantes", "url": "https://developer.mozilla.org/pt-BR/docs/Learn", "type": "documentação", "career_axis": "WEB_DEV"},
-    {"title": "O que é HTML, CSS e JavaScript?", "url": "https://www.youtube.com/watch?v=gSg-tXtK7sY", "type": "vídeo", "career_axis": "WEB_DEV"},
-    {"title": "Curso de React.js para Iniciantes", "url": "https://www.youtube.com/watch?v=FXqX7oof0I4", "type": "curso", "career_axis": "WEB_DEV"},
-    {"title": "CSS-Tricks: Um Guia para Flexbox", "url": "https://css-tricks.com/snippets/css/a-guide-to-flexbox/", "type": "artigo", "career_axis": "WEB_DEV"},
+    {"title": "O que é um front end dev?", "url": "https://www.w3schools.com/whatis/whatis_frontenddev.asp", "type": "artigo", "career_axis": "WEB_DEV"},
+    {"title": "Curso de React.js para Iniciantes", "url": "https://www.youtube.com/watch?v=2RWsLmu8yVc", "type": "video", "career_axis": "WEB_DEV"},
+    {"title": "CSS-Tricks", "url": "https://css-tricks.com/", "type": "artigo", "career_axis": "WEB_DEV"},
 
     # Data Science
-    {"title": "O que é Ciência de Dados? (Simplificado)", "url": "https://www.youtube.com/watch?v=F3s_42O3LdI", "type": "vídeo", "career_axis": "DATA_SCIENCE"},
+    {"title": "O que é Ciência de Dados? (Simplificado)", "url": "https://www.youtube.com/watch?v=F608hzn_ygo", "type": "vídeo", "career_axis": "DATA_SCIENCE"},
     {"title": "Pandas: Análise de Dados em Python", "url": "https://pandas.pydata.org/docs/user_guide/10min.html", "type": "documentação", "career_axis": "DATA_SCIENCE"},
-    {"title": "Scikit-Learn: Machine Learning em Python", "url": "https://scikit-learn.org/stable/tutorial/basic/tutorial.html", "type": "tutorial", "career_axis": "DATA_SCIENCE"},
+    {"title": "Scikit-Learn: Machine Learning em Python", "url": "https://scikit-learn.org/stable/getting_started.html", "type": "tutorial", "career_axis": "DATA_SCIENCE"},
     {"title": "Kaggle: Competições de Data Science", "url": "https://www.kaggle.com/", "type": "plataforma", "career_axis": "DATA_SCIENCE"},
 
     # Cybersecurity
-    {"title": "O que é Cibersegurança?", "url": "https://www.youtube.com/watch?v=sYvni-cAMt0", "type": "vídeo", "career_axis": "CYBERSECURITY"},
+    {"title": "O que é Cibersegurança?", "url": "https://www.youtube.com/watch?v=CU2yQxzkvFg", "type": "vídeo", "career_axis": "CYBERSECURITY"},
     {"title": "TryHackMe: Aprenda Cibersegurança Jogando", "url": "https://tryhackMe.com/", "type": "plataforma", "career_axis": "CYBERSECURITY"},
     {"title": "OWASP Top 10: As Maiores Vulnerabilidades Web", "url": "https://owasp.org/www-project-top-ten/", "type": "artigo", "career_axis": "CYBERSECURITY"},
 ]
@@ -52,3 +52,4 @@ def seed_data():
 
 if __name__ == "__main__":
     seed_data()
+

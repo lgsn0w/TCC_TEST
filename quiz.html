@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Vocacional de TI</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            max-width: 600px;
+            margin: 20px auto;
+            background-color: #f4f7f6;
+            color: #333;
+        }
+        h1, h2 { text-align: center; color: #2c3e50; }
+        form { background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        .question { margin-bottom: 20px; border: 1px solid #ddd; padding: 15px; border-radius: 8px; }
+        .question p { font-weight: 600; margin-top: 0; font-size: 1.05em; }
+        .options { display: flex; flex-wrap: wrap; justify-content: space-between; }
+        .options label { display: block; margin: 5px; }
+        button {
+            font-size: 1.2em;
+            padding: 12px 20px;
+            width: 100%;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover { background-color: #2980b9; }
+
+        /* --- Estilo dos Resultados --- */
+        #results {
+            margin-top: 30px;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        #results-type {
+            text-align: center;
+            font-size: 1.8em;
+            font-weight: bold;
+            color: #3498db;
+            margin-bottom: 20px;
+        }
+        .result-bar-container {
+            margin-bottom: 15px;
+        }
+        .result-bar-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9em;
+            font-weight: 600;
+            color: #555;
+            margin-bottom: 5px;
+        }
+        .result-bar-track {
+            width: 100%;
+            height: 20px;
+            background-color: #e0e0e0;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .result-bar-fill {
+            height: 100%;
+            background-color: #3498db;
+            width: 50%; /* Default, vai ser mudado pelo JS */
+            border-radius: 10px;
+            transition: width 0.5s ease-out;
+        }
+
+        /* --- NOVA SEÇÃO: Recomendações --- */
+        #recommendations {
+            margin-top: 30px;
+            border-top: 2px solid #eee;
+            padding-top: 20px;
+        }
+        #recommendations h3 {
+            text-align: center;
+            color: #2c3e50;
+        }
+        .recommendation-list {
+            list-style-type: none;
+            padding: 0;
+        }
+        .recommendation-item {
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+        .recommendation-item a {
+            text-decoration: none;
+            font-weight: 600;
+            color: #3498db;
+            font-size: 1.1em;
+        }
+        .recommendation-item a:hover {
+            text-decoration: underline;
+        }
+        .recommendation-item .type-badge {
+            display: inline-block;
+            background-color: #e0e0e0;
+            color: #555;
+            font-size: 0.8em;
+            padding: 3px 8px;
+            border-radius: 10px;
+            margin-right: 10px;
+            text-transform: capitalize;
+        }
+        .recommendation-item .axis-badge {
+            display: inline-block;
+            background-color: #3498db;
+            color: white;
+            font-size: 0.8em;
+            padding: 3px 8px;
+            border-radius: 10px;
+            font-weight: bold;
+        }
+        /* --- FIM DA NOVA SEÇÃO --- */
+
+    </style>
+</head>
+<body>
+
+    <h1>Quiz Vocacional de TI</h1>
+    <form id="quizForm">
+
+        <div class="question">
+            <p>Gosto de trabalhar na aparência de sites e apps, deixando tudo bonito e fácil de usar.</p>
+            <div class="options">
+                <label><input type="radio" name="q_like_visuals" value="1" required> 1 (Discordo)</label>
+                <label><input type="radio" name="q_like_visuals" value="2"> 2</label>
+                <label><input type="radio" name="q_like_visuals" value="3"> 3 (Neutro)</label>
+                <label><input type="radio" name="q_like_visuals" value="4"> 4</label>
+                <label><input type="radio" name="q_like_visuals" value="5"> 5 (Concordo)</label>
+            </div>
+        </div>
+
+        <div class="question">
+            <p>Acho satisfatório programar botões e fazer a lógica de um site funcionar.</p>
+            <div class="options">
+                <label><input type="radio" name="q_like_user_logic" value="1" required> 1 (Discordo)</label>
+                <label><input type="radio" name="q_like_user_logic" value="2"> 2</label>
+                <label><input type="radio" name="q_like_user_logic" value="3"> 3 (Neutro)</label>
+                <label><input type="radio" name="q_like_user_logic" value="4"> 4</label>
+                <label><input type="radio" name="q_like_user_logic" value="5"> 5 (Concordo)</label>
+            </div>
+        </div>
+
+        <div class="question">
+            <p>Prefiro resolver problemas complexos de matemática pura.</p>
+            <div class="options">
+                <label><input type="radio" name="q_like_deep_math" value="1" required> 1 (Discordo)</label>
+                <label><input type="radio" name="q_like_deep_math" value="2"> 2</label>
+                <label><input type="radio" name="q_like_deep_math" value="3"> 3 (Neutro)</label>
+                <label><input type="radio" name="q_like_deep_math" value="4"> 4</label>
+                <label><input type="radio" name="q_like_deep_math" value="5"> 5 (Concordo)</label>
+            </div>
+        </div>
+
+        <div class="question">
+            <p>Gosto de procurar padrões em grandes volumes de dados ou planilhas.</p>
+            <div class="options">
+                <label><input type="radio" name="q_like_patterns" value="1" required> 1 (Discordo)</label>
+                <label><input type="radio" name="q_like_patterns" value="2"> 2</label>
+                <label><input type="radio" name="q_like_patterns" value="3"> 3 (Neutro)</label>
+                <label><input type="radio" name="q_like_patterns" value="4"> 4</label>
+                <label><input type="radio" name="q_like_patterns" value="5"> 5 (Concordo)</label>
+            </div>
+        </div>
+
+        <div class="question">
+            <p>Me sinto confortável trabalhando com estatística e probabilidade.</p>
+            <div class="options">
+                <label><input type="radio" name="q_like_stats" value="1" required> 1 (Discordo)</label>
+                <label><input type="radio" name="q_like_stats" value="2"> 2</label>
+                <label><input type="radio" name="q_like_stats" value="3"> 3 (Neutro)</label>
+                <label><input type="radio" name="q_like_stats" value="4"> 4</label>
+                <label><input type="radio" name="q_like_stats" value="5"> 5 (Concordo)</label>
+            </div>
+        </div>
+
+        <div class="question">
+            <p>Gosto de pensar como um detetive para achar falhas ou resolver quebra-cabeças.</p>
+            <div class="options">
+                <label><input type="radio" name="q_like_puzzles" value="1" required> 1 (Discordo)</label>
+                <label><input type="radio" name="q_like_puzzles" value="2"> 2</label>
+                <label><input type="radio" name="q_like_puzzles" value="3"> 3 (Neutro)</label>
+                <label><input type="radio" name="q_like_puzzles" value="4"> 4</label>
+                <label><input type="radio" name="q_like_puzzles" value="5"> 5 (Concordo)</label>
+            </div>
+        </div>
+
+        <div class="question">
+            <p>Acredito em seguir regras e procedimentos rígidos para manter a segurança.</p>
+            <div class="options">
+                <label><input type="radio" name="q_like_rules" value="1" required> 1 (Discordo)</label>
+                <label><input type="radio" name="q_like_rules" value="2"> 2</label>
+                <label><input type="radio" name="q_like_rules" value="3"> 3 (Neutro)</label>
+                <label><input type="radio" name="q_like_rules" value="4"> 4</label>
+                <label><input type="radio" name="q_like_rules" value="5"> 5 (Concordo)</label>
+            </div>
+        </div>
+
+        <div class="question">
+            <p>Tenho interesse em (eticamente) "quebrar" sistemas para achar suas fraquezas.</p>
+            <div class="options">
+                <label><input type="radio" name="q_like_breaking_things" value="1" required> 1 (Discordo)</label>
+                <label><input type="radio" name="q_like_breaking_things" value="2"> 2</label>
+                <label><input type="radio" name="q_like_breaking_things" value="3"> 3 (Neutro)</label>
+                <label><input type="radio" name="q_like_breaking_things" value="4"> 4</label>
+                <label><input type="radio" name="q_like_breaking_things" value="5"> 5 (Concordo)</label>
+            </div>
+        </div>
+
+        <button type="submit" id="submitButton">Ver Meus Resultados</button>
+    </form>
+
+    <div id="results" style="display:none;">
+        <h2>Seus Resultados</h2>
+        <div id="results-type"></div>
+        <div id="results-bars"></div>
+        <p id="results-error" style="color: red;"></p>
+
+        <!-- NOVA DIV PARA RECOMENDAÇÕES -->
+        <div id="recommendations" style="display:none;">
+            <h3>Recursos Recomendados</h3>
+            <div id="recommendations-loading" style="text-align: center;">Carregando recomendações...</div>
+            <ul id="recommendations-list" class="recommendation-list"></ul>
+            <p id="recommendations-error" style="color: red;"></p>
+        </div>
+    </div>
+
+    <script>
+        // --- Definições Globais ---
+        const API_BASE_URL = 'http://127.0.0.1:8000';
+
+        // Mapeia chaves de eixo para nomes legíveis
+        const AXIS_LABELS = {
+            "WEB_DEV": "Desenvolvimento Web",
+            "DATA_SCIENCE": "Ciência de Dados",
+            "CYBERSECURITY": "Segurança Cibernética"
+        };
+
+        // --- Lógica Principal ---
+        document.getElementById('quizForm').addEventListener('submit', async function(event) {
+            event.preventDefault();
+            const submitButton = document.getElementById('submitButton');
+            submitButton.disabled = true;
+            submitButton.textContent = 'Calculando...';
+
+            // Limpa resultados antigos
+            clearAllResults();
+
+            // 1. Coletar respostas
+            const formData = new FormData(event.target);
+            const answers = {};
+
+            const questionNames = [
+                'q_like_visuals', 'q_like_user_logic', 'q_like_deep_math',
+                'q_like_patterns', 'q_like_stats', 'q_like_puzzles',
+                'q_like_rules', 'q_like_breaking_things'
+            ];
+
+            for (let name of questionNames) {
+                if (!formData.has(name)) {
+                    alert('Por favor, responda todas as perguntas.');
+                    submitButton.disabled = false;
+                    submitButton.textContent = 'Ver Meus Resultados';
+                    return;
+                }
+                answers[name] = parseInt(formData.get(name));
+            }
+
+            const submission = { "answers": answers };
+
+            // 2. Enviar para a API de Quiz
+            try {
+                const response = await fetch(`${API_BASE_URL}/quiz/submit`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(submission)
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Erro de HTTP! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+
+                // 3. Mostrar os resultados do quiz!
+                displayResults(data.scores);
+
+                // 4. (NOVO) Buscar recomendações com base nas pontuações
+                await fetchRecommendations(data.scores);
+
+            } catch (error) {
+                console.error('Erro ao enviar quiz:', error);
+                document.getElementById('results-error').textContent = `Erro ao calcular resultados: ${error.message}`;
+                document.getElementById('results').style.display = 'block';
+            } finally {
+                submitButton.disabled = false;
+                submitButton.textContent = 'Ver Meus Resultados';
+            }
+        });
+
+        // --- Funções Auxiliares ---
+
+        function clearAllResults() {
+            document.getElementById('results').style.display = 'none';
+            document.getElementById('results-type').innerHTML = "";
+            document.getElementById('results-bars').innerHTML = "";
+            document.getElementById('results-error').textContent = "";
+
+            document.getElementById('recommendations').style.display = 'none';
+            document.getElementById('recommendations-list').innerHTML = "";
+            document.getElementById('recommendations-error').textContent = "";
+            document.getElementById('recommendations-loading').style.display = 'block';
+        }
+
+        function displayResults(scores) {
+            const resultsDiv = document.getElementById('results');
+            const typeDiv = document.getElementById('results-type');
+            const barsDiv = document.getElementById('results-bars');
+
+            // 1. Converte o objeto de scores para um array ordenado
+            const sortedScores = Object.entries(scores).sort((a, b) => b[1] - a[1]);
+
+            // 2. Define a melhor opção
+            const topMatchKey = sortedScores[0][0];
+            const topMatchName = AXIS_LABELS[topMatchKey] || topMatchKey;
+            typeDiv.textContent = `Seu Perfil Ideal: ${topMatchName}`;
+
+            // 3. Loop por todos os scores e crie as barras
+            for (let [axisKey, score] of sortedScores) {
+                const axisName = AXIS_LABELS[axisKey] || axisKey;
+                const widthPercent = (score + 1) / 2 * 100;
+                const fitPercent = Math.round(widthPercent);
+
+                const barHTML = `
+                    <div class="result-bar-container">
+                        <div class="result-bar-labels">
+                            <span><strong>${axisName}</strong></span>
+                            <span>${fitPercent}% de Afinidade</span>
+                        </div>
+                        <div class="result-bar-track">
+                            <div class="result-bar-fill" style="width: ${widthPercent}%; background-color: ${score > 0 ? '#3498db' : '#e74c3c'};"></div>
+                        </div>
+                    </div>
+                `;
+                barsDiv.innerHTML += barHTML;
+            }
+
+            // Mostra a seção de resultados (mas ainda não as recomendações)
+            resultsDiv.style.display = 'block';
+            resultsDiv.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // --- NOVA FUNÇÃO ---
+        async function fetchRecommendations(scores) {
+            const recommendationsDiv = document.getElementById('recommendations');
+            const loadingDiv = document.getElementById('recommendations-loading');
+            const listUl = document.getElementById('recommendations-list');
+            const errorP = document.getElementById('recommendations-error');
+
+            recommendationsDiv.style.display = 'block'; // Mostra a seção de "Carregando..."
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/recommendations`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ "scores": scores })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Erro de HTTP! status: ${response.status}`);
+                }
+
+                const recommendations = await response.json();
+
+                if (recommendations.length === 0) {
+                    loadingDiv.textContent = "Não encontramos recomendações para o seu perfil. Tente novamente!";
+                    return;
+                }
+
+                // Limpa a lista
+                listUl.innerHTML = "";
+
+                // Popula a lista
+                recommendations.forEach(item => {
+                    const itemHTML = `
+                        <li class="recommendation-item">
+                            <div>
+                                <span class="type-badge">${item.type}</span>
+                                <span class="axis-badge">${AXIS_LABELS[item.career_axis] || item.career_axis}</span>
+                            </div>
+                            <a href="${item.url}" target="_blank" rel="noopener noreferrer">${item.title}</a>
+                        </li>
+                    `;
+                    listUl.innerHTML += itemHTML;
+                });
+
+                loadingDiv.style.display = 'none'; // Esconde "Carregando..."
+
+            } catch (error) {
+                console.error('Erro ao buscar recomendações:', error);
+                loadingDiv.style.display = 'none';
+                errorP.textContent = `Erro ao carregar recomendações: ${error.message}`;
+            }
+        }
+    </script>
+</body>
+</html>
+

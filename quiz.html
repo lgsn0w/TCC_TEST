@@ -72,7 +72,7 @@
             transition: width 0.5s ease-out;
         }
 
-        /* --- NOVA SEÇÃO: Recomendações --- */
+        /* --- SEÇÃO: Recomendações --- */
         #recommendations {
             margin-top: 30px;
             border-top: 2px solid #eee;
@@ -121,8 +121,6 @@
             border-radius: 10px;
             font-weight: bold;
         }
-        /* --- FIM DA NOVA SEÇÃO --- */
-
     </style>
 </head>
 <body>
@@ -227,18 +225,30 @@
         <div id="results-bars"></div>
         <p id="results-error" style="color: red;"></p>
 
-        <!-- NOVA DIV PARA RECOMENDAÇÕES -->
         <div id="recommendations" style="display:none;">
             <h3>Recursos Recomendados</h3>
             <div id="recommendations-loading" style="text-align: center;">Carregando recomendações...</div>
             <ul id="recommendations-list" class="recommendation-list"></ul>
             <p id="recommendations-error" style="color: red;"></p>
         </div>
-    </div>
+
+        <div id="chatbot" style="display:none; margin-top: 30px; border-top: 2px solid #eee; padding-top: 20px;">
+            <h3>Converse com seu Conselheiro de IA</h3>
+            <p>Faça uma pergunta com base nos seus resultados:</p>
+            
+            <input type="text" id="chatInput" style="width: 70%; padding: 8px;" placeholder="Qual linguagem devo aprender?">
+            <button id="chatButton" style="width: 28%; padding: 8px; font-size: 1em; margin-top: 5px;">Enviar</button>
+            
+            <div id="chatResponseArea" style="white-space: pre-wrap; background: #f9f9f9; border: 1px solid #ddd; padding: 15px; margin-top: 15px; min-height: 50px;">
+                ...
+            </div>
+        </div>
+        </div>
 
     <script>
         // --- Definições Globais ---
         const API_BASE_URL = 'http://127.0.0.1:8000';
+        let currentScores = null; // <-- Variável global para guardar os scores
 
         // Mapeia chaves de eixo para nomes legíveis
         const AXIS_LABELS = {
@@ -292,6 +302,7 @@
                 }
 
                 const data = await response.json();
+                currentScores = data.scores; // <-- Salva os scores na variável global
 
                 // 3. Mostrar os resultados do quiz!
                 displayResults(data.scores);
@@ -321,6 +332,11 @@
             document.getElementById('recommendations-list').innerHTML = "";
             document.getElementById('recommendations-error').textContent = "";
             document.getElementById('recommendations-loading').style.display = 'block';
+
+            // Limpa também o chatbot
+            document.getElementById('chatbot').style.display = 'none';
+            document.getElementById('chatResponseArea').innerText = "...";
+            document.getElementById('chatInput').value = "";
         }
 
         function displayResults(scores) {
@@ -356,12 +372,15 @@
                 barsDiv.innerHTML += barHTML;
             }
 
-            // Mostra a seção de resultados (mas ainda não as recomendações)
+            // Mostra a seção de resultados
             resultsDiv.style.display = 'block';
             resultsDiv.scrollIntoView({ behavior: 'smooth' });
+
+            // Mostra a caixa do chatbot
+            document.getElementById('chatbot').style.display = 'block'; 
         }
 
-        // --- NOVA FUNÇÃO ---
+        // --- FUNÇÃO DE RECOMENDAÇÕES ---
         async function fetchRecommendations(scores) {
             const recommendationsDiv = document.getElementById('recommendations');
             const loadingDiv = document.getElementById('recommendations-loading');
@@ -413,7 +432,55 @@
                 errorP.textContent = `Erro ao carregar recomendações: ${error.message}`;
             }
         }
+
+        // --- NOVA FUNÇÃO PARA O CHATBOT ---
+        document.getElementById('chatButton').addEventListener('click', async () => {
+            const chatButton = document.getElementById('chatButton');
+            const chatInput = document.getElementById('chatInput');
+            const chatResponseArea = document.getElementById('chatResponseArea');
+
+            const userMessage = chatInput.value;
+            
+            // 1. Verifica se a mensagem está vazia ou se os scores ainda não existem
+            if (!userMessage) return;
+            if (!currentScores) {
+                chatResponseArea.innerText = "Erro: scores não encontrados. Tente enviar o quiz novamente.";
+                return;
+            }
+
+            chatButton.disabled = true;
+            chatResponseArea.innerText = "Pensando...";
+
+            // 2. Monta o "corpo" da requisição
+            const requestBody = {
+                scores: currentScores, // <-- USA OS SCORES REAIS DO QUIZ!
+                message: userMessage
+            };
+
+            // 3. Tenta chamar sua API FastAPI
+            try {
+                const response = await fetch(`${API_BASE_URL}/quiz/coach`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(requestBody)
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Erro de HTTP! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                chatResponseArea.innerText = data.reply; // Mostra a resposta da IA
+
+            } catch (error) {
+                console.error('Erro ao chamar a API do coach:', error);
+                chatResponseArea.innerText = 'Erro ao conectar com o servidor. Tente novamente.';
+            } finally {
+                chatButton.disabled = false;
+                // Não limpa o input, caso o usuário queira editar a pergunta
+                // chatInput.value = ""; 
+            }
+        });
     </script>
 </body>
 </html>
-
